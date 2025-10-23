@@ -138,3 +138,19 @@
     total-claims: (var-get claim-counter)
   })
 )
+
+;; Get pool balance
+(define-read-only (get-pool-balance (pool-id uint))
+  (match (map-get? pools { pool-id: pool-id })
+    pool (ok (get total-funds pool))
+    (err ERR-NOT-FOUND)
+  )
+)
+
+;; Check member contribution
+(define-read-only (get-member-contribution (pool-id uint) (member principal))
+  (match (map-get? members { pool-id: pool-id, member: member })
+    member-data (ok (get contributed member-data))
+    (err ERR-NOT-FOUND)
+  )
+)
